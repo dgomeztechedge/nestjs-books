@@ -8,12 +8,14 @@ executors:
   my-executor:
     docker:
       - image: circleci/node:10
-    working_directory: /tmp
+    working_directory: /tmp/books
 
 jobs:
   build:
+    
     executor: my-executor
     steps:
+      - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
