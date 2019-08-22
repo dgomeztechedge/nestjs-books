@@ -10,14 +10,13 @@ executors:
       # specify the version you desire here
       - image: circleci/node:10
 
-    working_directory: ~/books
+    working_directory: /books
 
 jobs:
   build:
     executor: my-executor
     steps:
       - checkout
-
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -33,19 +32,16 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - persist_to_workspace:
-      # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
-      # taken to be the root directory of the workspace.
-      root: workspace
-      # Must be relative path from root
-      paths:
-        - echo-output
+          root: workspace
+          paths:
+           - echo-output
 
   test:
     executor: my-executor
     steps:
     - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: /tmp/workspace
+          at: /books/workspace
     - run: npm test
     - store_artifacts:
         path: test-results.xml
