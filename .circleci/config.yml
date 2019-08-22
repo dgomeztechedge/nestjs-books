@@ -14,7 +14,6 @@ jobs:
   build:
     executor: my-executor
     steps:
-      - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
