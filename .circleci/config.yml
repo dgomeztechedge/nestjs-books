@@ -37,6 +37,8 @@ jobs:
 
     steps:
       - checkout
+      - restore_cache: # Restores the cached dependency.
+         key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
       # run tests!
       - run: yarn test
       - store_artifacts:
