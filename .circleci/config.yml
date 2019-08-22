@@ -7,7 +7,7 @@ version: 2.1
 executors:
   my-executor:
     docker:
-      - image: google/cloud-sdk
+      - image: lakoo/node-gcloud-docker
     working_directory: /tmp/books
     
 
@@ -23,8 +23,8 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-      - run: curl -sL https://deb.nodesource.com/setup_6.x | bash -
-      - run: apt-get install -y nodejs
+      # - run: curl -sL https://deb.nodesource.com/setup_6.x | bash -
+      # - run: apt-get install -y nodejs
       - run: npm install
 
       - save_cache:
