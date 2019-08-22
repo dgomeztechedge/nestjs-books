@@ -3,14 +3,18 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2
-jobs:
-  build:
+
+executors:
+  my-executor:
     docker:
       # specify the version you desire here
       - image: circleci/node:10
 
     working_directory: ~/books
 
+jobs:
+  build:
+    executor: my-executor
     steps:
       - checkout
 
@@ -28,28 +32,28 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - persist_to_workspace:
+      # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
+      # taken to be the root directory of the workspace.
+      root: workspace
+      # Must be relative path from root
+      paths:
+        - echo-output
+
   test:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:10
-
-    working_directory: ~/books
-
+    executor: my-executor
     steps:
-      - checkout
-      - restore_cache: # Restores the cached dependency.
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      # run tests!
-      # - run: npm install
-      - run: npm test
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
+    - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp/workspace
+    - run: npm test
+    - store_artifacts:
+        path: test-results.xml
+        prefix: tests
+    - store_artifacts:
+        path: coverage
+        prefix: coverage
+      
 workflows:
   version: 2
   build_and_test: # name of your workflow
