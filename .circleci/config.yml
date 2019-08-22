@@ -38,7 +38,9 @@ jobs:
     steps:
       - checkout
       - restore_cache: # Restores the cached dependency.
-          key: v1-dependencies-{{ checksum "package.json" }}
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
       # run tests!
       - run: yarn test
       - store_artifacts:
