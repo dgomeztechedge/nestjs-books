@@ -42,7 +42,7 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
       # run tests!
-      - run: npm install
+      # - run: npm install
       - run: npm test
       - store_artifacts:
           path: test-results.xml
