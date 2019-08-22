@@ -27,7 +27,12 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
+      - persist_to_workspace:
+                # Must be an absolute path, or relative path from working_directory
+                root: my_workspace
+                # Must be relative path from root
+                paths:
+                  - echo-output
   test:
     docker:
       # specify the version you desire here
@@ -37,13 +42,10 @@ jobs:
 
     steps:
       # run tests!
+      - restore_cache: # Restores the cached dependency.
+          key: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn test
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory
-          root: my_workspace
-          # Must be relative path from root
-          paths:
-            - echo-output
+      
 workflows:
   version: 2
   build_and_test: # name of your workflow
