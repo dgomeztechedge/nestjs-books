@@ -44,3 +44,11 @@ jobs:
           # Must be relative path from root
           paths:
             - echo-output
+workflows:
+  version: 2
+  build_and_test: # name of your workflow
+    jobs:
+      - build
+      - test:
+        requires:
+           - build
