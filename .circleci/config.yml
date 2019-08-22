@@ -52,7 +52,10 @@ jobs:
 
   authorize:
     docker:
-      - image: google/cloud-sdk
+      - image: gcr.io/project/lakoo/node-gcloud-docker
+        auth:
+          username: __json_key
+          password: $GLCOUD_SERVICE_KEY
     steps:
       - attach_workspace:
           at: /tmp/books
