@@ -7,7 +7,7 @@ version: 2.1
 executors:
   my-executor:
     docker:
-      - image: lakoo/node-gcloud-docker
+      - image: gcr.io/project/lakoo/node-gcloud-docker
         auth:
           username: _json_key # default username when using a JSON key file to authenticate
           password: $GCLOUD_SERVICE_KEY
@@ -16,6 +16,7 @@ executors:
 jobs:
   build:
     executor: my-executor
+
     steps:
       - checkout
       # Download and cache dependencies
@@ -54,6 +55,7 @@ jobs:
 
   deploy:
     executor: my-executor
+
     steps:
       - attach_workspace:
           at: /tmp/books
