@@ -8,13 +8,13 @@ executors:
   my-executor:
     docker:
       - image: circleci/node:10
-    working_directory: /books
+    working_directory: /tmp
 
 jobs:
   build:
     executor: my-executor
     steps:
-      # - checkout
+      - checkout
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -30,7 +30,7 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - persist_to_workspace:
-          root: workspace
+          root: books
           paths:
            - echo-output
 
@@ -39,7 +39,7 @@ jobs:
     steps:
     - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: /books/workspace
+          at: /tmp/books
     - run: npm test
     - store_artifacts:
         path: test-results.xml
