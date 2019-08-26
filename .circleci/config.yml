@@ -52,7 +52,7 @@ jobs:
 
   authorize:
     docker:
-      - image: gcr.io/project/lakoo/node-gcloud-docker
+      - image: lakoo/node-gcloud-docker
         auth:
           username: __json_key
           password: $GLCOUD_SERVICE_KEY
@@ -63,7 +63,15 @@ jobs:
           echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
           gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-
+  deploy:
+    executor: my-executor
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp/books
+      - run:
+          name: Deploy Master to GKE
+          command: ./deploy.sh
 workflows:
   version: 2
   build_and_test: # name of your workflow
@@ -75,3 +83,6 @@ workflows:
       - authorize:
           requires:
             - test
+      - deploy:
+          requires:
+            - authorize
