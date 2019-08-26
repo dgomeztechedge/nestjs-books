@@ -55,13 +55,12 @@ jobs:
       - image: lakoo/node-gcloud-docker
         auth:
           username: __json_key
-          password: $GLCOUD_SERVICE_KEY
+          password: $GCLOUD_SERVICE_KEY
     steps:
       - attach_workspace:
           at: /tmp/books
-      - run: |
-          sudo gcloud --quiet components update
-          echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account  techedge-es-bp-dyn-dsup-dev@appspot.gserviceaccount.com --key-file=-
+      - run: |         
+          echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account  techedge-es-bp-dyn-dsup-dev@appspot.gserviceaccount.com --key-file=
           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
           gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
   deploy:
