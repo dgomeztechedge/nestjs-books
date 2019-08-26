@@ -51,16 +51,13 @@ jobs:
           prefix: coverage
 
   authorize:
-    docker:
-      - image: lakoo/node-gcloud-docker
-        auth:
-          username: __json_key
-          password: $GCLOUD_SERVICE_KEY
+    executor: my-executor
     steps:
       - attach_workspace:
           at: /tmp/books
-      - run: |         
-          echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account  techedge-es-bp-dyn-dsup-dev@appspot.gserviceaccount.com --key-file=
+      - run: | 
+          cat $GCLOUD_SERVICE_KEY | docker login -u _json_key --password-stdin https://eu.gcr.io        
+          echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account techedge-es-bp-dyn-dsup-dev@appspot.gserviceaccount.com --key-file=
           gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
           gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
   deploy:
