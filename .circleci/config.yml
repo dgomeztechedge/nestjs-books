@@ -50,28 +50,27 @@ jobs:
           path: coverage
           prefix: coverage
 
-  authorize:
-    docker: 
-        - image: gcr.io/techedge-es-bp-dyn-dsup-dev/books-ci-test
-          auth:
-             username: _json_key
-             password: $GCLOUD_SERVICE_KEY
+  deploy-staging:
+    working_directory: ~/tmp/books
+    docker:
+      - image: google/cloud-sdk
     steps:
+      - checkout
+      - setup_remote_docker
       - attach_workspace:
-          at: /tmp/books
-      - run: | 
-          echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account techedge-es-bp-dyn-dsup-dev@appspot.gserviceaccount.com --key-file=
-          gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
-          gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
-  deploy:
-    executor: my-executor
-    steps:
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: /tmp/books
       - run:
-          name: Deploy Master to GKE
-          command: ./deploy.sh
+          name: Load docker image from cache
+          command: docker load --input docker-cache/built-image.tar
+      - run:
+          name: Auth gCloud SDK
+          command: bash ./deploy/gcloud-auth.sh
+      - run:
+          name: tag docker image with latest
+          command: docker tag asia.gcr.io/${PROJECT}/${DOCKER_IMAGE}:$CIRCLE_SHA1 asia.gcr.io/${PROJECT}/${DOCKER_IMAGE}:latest
+      - run:
+          name: Running staging.sh
+          command: bash ./deploy/staging.sh
 workflows:
   version: 2
   build_and_test: # name of your workflow
@@ -80,9 +79,6 @@ workflows:
       - test:
           requires:
             - build
-      - authorize:
+      - deploy-staging:
           requires:
             - test
-      - deploy:
-          requires:
-            - authorize
