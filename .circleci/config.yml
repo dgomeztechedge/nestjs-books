@@ -59,8 +59,8 @@ jobs:
           name: Comprobar versión GCloud
           command: gcloud -v
       - run:
-          name: Comprobar archivos en directorio actual
-          command: ls 
+          name: Lanzar deploy
+          command: ./deployment.sh 
 workflows:
   version: 2
   build_and_test: # name of your workflow
