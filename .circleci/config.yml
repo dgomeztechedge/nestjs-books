@@ -25,7 +25,12 @@ jobs:
       # - run: curl -sL https://deb.nodesource.com/setup_6.x | bash -
       # - run: apt-get install -y nodejs
       - run: npm install
-      - run: ls
+      - run:    
+          name: Conseguir datos produccion
+          command: echo $DATABASE_PRODUCTION > production.txt
+      - run:    
+          name: Recodificar a archivo
+          command: base64 production.txt -d > production.env
       - save_cache:
           paths:
             - node_modules
