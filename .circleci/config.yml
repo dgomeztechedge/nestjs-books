@@ -63,7 +63,7 @@ jobs:
           command: echo $ACCOUNT_KEY_STAGING > service_key.txt
       - run:    
           name: Recodificar a archivo
-          command: base64 -i service_key.txt -d > gcloud-service-key.json
+          command: base64 service_key.txt -d > gcloud-service-key.json
       - run:    
           name: Autentificarse
           command: gcloud auth activate-service-account --key-file ./gcloud-service-key.json
