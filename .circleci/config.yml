@@ -31,6 +31,7 @@ jobs:
       - run:    
           name: Recodificar a archivo
           command: base64 production.txt -d > production.env
+      - run: ls
       - save_cache:
           paths:
             - node_modules
