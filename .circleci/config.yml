@@ -58,9 +58,18 @@ jobs:
       - run:
           name: Comprobar versión GCloud
           command: gcloud -v
-      - run:
-          name: Lanzar deploy
-          command: ./deployment.sh 
+      - run:    
+          name: Conseguir clave json
+          command: echo $ACCOUNT_KEY_STAGING > service_key.txt
+      - run:    
+          name: Recodificar a archivo
+          command: base64 -i service_key.txt -d > gcloud-service-key.json
+      - run:    
+          name: Autentificarse
+          command: gcloud auth activate-service-account --key-file ./gcloud-service-key.json
+      - run:    
+          name: Deploy a App Engine
+          command: gcloud app deploy
 workflows:
   version: 2
   build_and_test: # name of your workflow
