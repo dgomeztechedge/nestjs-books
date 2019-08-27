@@ -68,6 +68,9 @@ jobs:
           name: Autentificarse
           command: gcloud auth activate-service-account --key-file ./gcloud-service-key.json
       - run:    
+          name: Seleccionar proyecto
+          command: gcloud config set project $PROJECT_ID
+      - run:    
           name: Deploy a App Engine
           command: gcloud app deploy
 workflows:
