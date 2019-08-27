@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { ConfigModule } from './config/config.module';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { join } from 'path';
@@ -11,36 +12,49 @@ import { BookService } from './book/services/book.service';
 import { ReaderController } from './reader/controllers/reader.controller';
 import { ReaderService } from './reader/services/reader.service';
 import { Reader } from './reader/entities/reader.entity';
-
-// graphql
 import { AuthorResolver } from './author/graphql/author.resolver';
 import { BookResolver } from './book/graphql/book.resolver';
+import { ConfigService } from './config/config.service';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+
+// graphql
+
+// middleware
 
 @Module({
     imports: [
+        ConfigModule,
         GraphQLModule.forRoot({
             debug: true,
             playground: true,
             typePaths: ['./**/*.graphql'],
             definitions: {
                 path: join(process.cwd(), 'src/graphql.ts')
-            },
+            }
         }),
-        TypeOrmModule.forRoot({
-            "type": "mysql",
-            "host": "localhost",
-            "port": 33001,
-            "username": "root",
-            "password": "123456",
-            "database": "book_local",
-            "entities": [__dirname + '/**/*.entity{.ts,.js}'],
-            "synchronize": true
+        TypeOrmModule.forRootAsync({
+            imports: [ConfigModule],
+            useFactory: async (config: ConfigService) => ({
+                "type": "mysql" as "mysql",
+                "host": config.get('DATABASE_HOST'),
+                "port": <number><unknown>config.get('DATABASE_PORT'),
+                "username": config.get('DATABASE_USER'),
+                "password": config.get('DATABASE_PASSWORD'),
+                "database": config.get('DATABASE_SCHEMA'),
+                "entities": [__dirname + '/**/*.entity{.ts,.js}'],
+                "synchronize": true
+            }),
+            inject: [ConfigService]
         }),
         TypeOrmModule.forFeature([
             Author, 
             Book, 
             Reader
-        ])
+        ]),
+        AuthModule,
+        UserModule
     ],
     controllers: [
         AuthorController,
@@ -48,6 +62,7 @@ import { BookResolver } from './book/graphql/book.resolver';
         ReaderController
     ],
     providers: [
+        ConfigModule,
         AuthorService, 
         BookService, 
         ReaderService,
@@ -57,4 +72,13 @@ import { BookResolver } from './book/graphql/book.resolver';
         BookResolver
     ],
 })
-export class AppModule {}
+export class AppModule implements NestModule 
+{
+    // set middleware configuration
+    configure(consumer: MiddlewareConsumer) 
+    {
+        consumer
+          .apply(LoggerMiddleware)
+          .forRoutes('book');
+      }
+}
