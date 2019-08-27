@@ -51,26 +51,17 @@ jobs:
           prefix: coverage
 
   deploy-staging:
-    working_directory: ~/tmp/books
-    docker:
-      - image: google/cloud-sdk
-    steps:
-      - checkout
-      - setup_remote_docker
+    executor: my-executor
+    working_directory: ~/tmp/books   
+    steps:     
       - attach_workspace:
           at: /tmp/books
       - run:
-          name: Load docker image from cache
-          command: docker load --input docker-cache/built-image.tar
+          name: Comprobar versión GCloud
+          command: gcloud -v
       - run:
-          name: Auth gCloud SDK
-          command: bash ./deploy/gcloud-auth.sh
-      - run:
-          name: tag docker image with latest
-          command: docker tag asia.gcr.io/${PROJECT}/${DOCKER_IMAGE}:$CIRCLE_SHA1 asia.gcr.io/${PROJECT}/${DOCKER_IMAGE}:latest
-      - run:
-          name: Running staging.sh
-          command: bash ./deploy/staging.sh
+          name: Comprobar archivos en directorio actual
+          command: ls      
 workflows:
   version: 2
   build_and_test: # name of your workflow
