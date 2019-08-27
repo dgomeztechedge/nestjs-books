@@ -61,7 +61,7 @@ jobs:
           command: gcloud -v
       - run:
           name: Comprobar archivos en directorio actual
-          command: ls      
+          command: ls ${HOME}     
 workflows:
   version: 2
   build_and_test: # name of your workflow
