@@ -72,7 +72,7 @@ jobs:
           command: gcloud config set project $PROJECT_ID
       - run:    
           name: Deploy a App Engine
-          command: gcloud app deploy
+          command: gcloud -q app deploy
 workflows:
   version: 2
   build_and_test: # name of your workflow
