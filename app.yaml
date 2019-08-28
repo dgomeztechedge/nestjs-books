@@ -1,2 +1,4 @@
 runtime: custom
 env: flex
+beta_settings:
+  cloud_sql_instances: /cloudsql/techedge-es-bp-dyn-dsup-dev:europe-west1:books
