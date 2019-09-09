@@ -40,6 +40,7 @@ import { AdminModule } from './hades-admin/admin.module';
         type: 'mysql' as 'mysql',
         socketPath: config.get('DATABASE_SOCKET'),
         port: 3306,
+        host: '10.42.17.3',
         username: config.get('DATABASE_USER'),
         password: config.get('DATABASE_PASSWORD'),
         database: config.get('DATABASE_SCHEMA'),
