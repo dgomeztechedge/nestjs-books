@@ -25,7 +25,6 @@ jobs:
       # - run: curl -sL https://deb.nodesource.com/setup_6.x | bash -
       # - run: apt-get install -y nodejs
 
-      - run: yum install -y gcc-c++ make
       - run: npm install
       - run:    
           name: Conseguir datos produccion
