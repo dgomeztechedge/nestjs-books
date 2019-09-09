@@ -40,7 +40,7 @@ import { AdminModule } from './hades-admin/admin.module';
         // extra: {
         //   socketPath: config.get('DATABASE_SOCKET'),
         // },
-        port: '3306',
+        port: 3306,
         host: '172.17.0.1',
         username: config.get('DATABASE_USER'),
         password: config.get('DATABASE_PASSWORD'),
