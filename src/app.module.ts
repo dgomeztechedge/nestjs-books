@@ -23,63 +23,50 @@ import { AdminModule } from './hades-admin/admin.module';
 // middleware
 
 @Module({
-    imports: [
-        ConfigModule,
-        GraphQLModule.forRoot({
-            debug: true,
-            playground: true,
-            typePaths: ['./**/*.graphql'],
-            definitions: {
-                path: join(process.cwd(), 'src/graphql.ts')
-            }
-        }),
-        TypeOrmModule.forRootAsync({
-            imports: [ConfigModule],
-            useFactory: async (config: ConfigService) => ({
-                "type": "mysql" as "mysql",
-                "host": config.get('DATABASE_HOST'),
-                "extra": {
-                    "socketPath": config.get('DATABASE_SOCKET')
-                },
-                "port": <number><unknown>config.get('DATABASE_PORT'),
-                "username": config.get('DATABASE_USER'),
-                "password": config.get('DATABASE_PASSWORD'),
-                "database": config.get('DATABASE_SCHEMA'),
-                "entities": [__dirname + '/**/*.entity{.ts,.js}'],
-                "synchronize": true
-            }),
-            inject: [ConfigService]
-        }),
-        TypeOrmModule.forFeature([
-            Author, 
-            Book, 
-            Reader
-        ]),
-        AdminModule
-    ],
-    controllers: [
-        AuthorController,
-        BookController,
-        ReaderController
-    ],
-    providers: [
-        ConfigModule,
-        AuthorService, 
-        BookService, 
-        ReaderService,
+  imports: [
+    ConfigModule,
+    GraphQLModule.forRoot({
+      debug: true,
+      playground: true,
+      typePaths: ['./**/*.graphql'],
+      definitions: {
+        path: join(process.cwd(), 'src/graphql.ts'),
+      },
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        type: 'mysql' as 'mysql',
+        extra: {
+          socketPath: config.get('DATABASE_SOCKET'),
+        },
+        // "port": config.get('DATABASE_PORT'),
+        username: config.get('DATABASE_USER'),
+        password: config.get('DATABASE_PASSWORD'),
+        database: config.get('DATABASE_SCHEMA'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
+    TypeOrmModule.forFeature([Author, Book, Reader]),
+    AdminModule,
+  ],
+  controllers: [AuthorController, BookController, ReaderController],
+  providers: [
+    ConfigModule,
+    AuthorService,
+    BookService,
+    ReaderService,
 
-        // resolvers
-        AuthorResolver,
-        BookResolver
-    ],
+    // resolvers
+    AuthorResolver,
+    BookResolver,
+  ],
 })
-export class AppModule implements NestModule 
-{
-    // set middleware configuration
-    configure(consumer: MiddlewareConsumer) 
-    {
-        consumer
-          .apply(LoggerMiddleware)
-          .forRoutes('book');
-      }
+export class AppModule implements NestModule {
+  // set middleware configuration
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('book');
+  }
 }
