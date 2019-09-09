@@ -7,7 +7,7 @@ version: 2.1
 executors:
   my-executor:
     docker:
-      - image: lakoo/node-alpine-gcloud
+      - image: lakoo/node-gcloud-docker
     working_directory: /tmp/books
 
 jobs:
@@ -25,6 +25,7 @@ jobs:
       # - run: curl -sL https://deb.nodesource.com/setup_6.x | bash -
       # - run: apt-get install -y nodejs
 
+      - run: apk --no-cache add --virtual builds-deps build-base python
       - run: npm install
       - run:    
           name: Conseguir datos produccion
