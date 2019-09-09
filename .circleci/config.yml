@@ -7,7 +7,7 @@ version: 2.1
 executors:
   my-executor:
     docker:
-      - image: lakoo/node-gcloud-docker
+      - image: lakoo/node-alpine-gcloud
     working_directory: /tmp/books
 
 jobs:
