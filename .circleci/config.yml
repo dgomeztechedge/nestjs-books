@@ -24,7 +24,8 @@ jobs:
             - v1-dependencies-
       # - run: curl -sL https://deb.nodesource.com/setup_6.x | bash -
       # - run: apt-get install -y nodejs
-      - run: npm install node-pre-gyp 
+
+      - run: yum install -y gcc-c++ make
       - run: npm install
       - run:    
           name: Conseguir datos produccion
