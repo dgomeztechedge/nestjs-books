@@ -37,10 +37,11 @@ import { AdminModule } from './hades-admin/admin.module';
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({
         type: 'mysql' as 'mysql',
-        extra: {
-          socketPath: config.get('DATABASE_SOCKET'),
-        },
-        // "port": config.get('DATABASE_PORT'),
+        // extra: {
+        //   socketPath: config.get('DATABASE_SOCKET'),
+        // },
+        port: 3306,
+        host: 'localhost',
         username: config.get('DATABASE_USER'),
         password: config.get('DATABASE_PASSWORD'),
         database: config.get('DATABASE_SCHEMA'),
