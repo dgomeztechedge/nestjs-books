@@ -1,5 +1,7 @@
 runtime: custom
 env: flex
+mautomatic_scaling:
+  min_num_instances: 1
 network:
   session_affinity: true   
 beta_settings:
