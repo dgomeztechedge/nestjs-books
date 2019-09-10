@@ -1,7 +1,7 @@
 runtime: custom
 env: flex
 service: nestjs-books
-mautomatic_scaling:
+automatic_scaling:
   min_num_instances: 1
 network:
   forwarded_ports:
