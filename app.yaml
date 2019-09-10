@@ -1,8 +1,6 @@
 runtime: custom
 env: flex
 network:
-  session_affinity: true
-  forwarded_ports:  
-    - 3306/tcp    
+  session_affinity: true   
 beta_settings:
   cloud_sql_instances: techedge-es-bp-dyn-dsup-dev:europe-west1:books=tcp:3306
