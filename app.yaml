@@ -1,6 +1,5 @@
 runtime: custom
 env: flex
-service: nestjs-books
 automatic_scaling:
   min_num_instances: 1
 network:
