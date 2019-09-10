@@ -42,7 +42,7 @@ import { AdminModule } from './hades-admin/admin.module';
         host: '172.17.0.1',
         username: config.get('DATABASE_USER'),
         password: config.get('DATABASE_PASSWORD'),
-        database: 'sys',
+        database: config.get('DATABASE_SCHEMA'),
         entities: ['dist/**/*.entity{.ts,.js}'],
         synchronize: true,
         logging: false,
