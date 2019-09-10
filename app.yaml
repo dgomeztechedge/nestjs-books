@@ -1,4 +1,4 @@
 runtime: custom
 env: flex
 beta_settings:
-  cloud_sql_instances: techedge-es-bp-dyn-dsup-dev:europe-west1:books
+  cloud_sql_instances: techedge-es-bp-dyn-dsup-dev:europe-west1:books=tcp:3306
