@@ -1,8 +1,11 @@
 runtime: custom
 env: flex
+service: NestJS Books
 mautomatic_scaling:
   min_num_instances: 1
 network:
+  forwarded_ports:
+    - 3000
   session_affinity: true   
 beta_settings:
   cloud_sql_instances: techedge-es-bp-dyn-dsup-dev:europe-west1:books=tcp:3306
