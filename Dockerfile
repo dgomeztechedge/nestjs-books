@@ -1,5 +1,5 @@
 FROM gcr.io/google-appengine/nodejs	
-EXPOSE 80
+EXPOSE 8000
 COPY . /app/
 RUN npm install
 RUN npm run build
