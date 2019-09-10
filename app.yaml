@@ -1,6 +1,6 @@
 runtime: custom
 env: flex
-service: NestJS Books
+service: 'NestJS Books'
 mautomatic_scaling:
   min_num_instances: 1
 network:
